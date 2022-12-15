@@ -1,0 +1,25 @@
+{
+  "name": "fullstackopen-exe-3-a",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddoyediran/fullstackopen-exe-3-a.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ddoyediran/fullstackopen-exe-3-a/issues"
+  },
+  "homepage": "https://github.com/ddoyediran/fullstackopen-exe-3-a#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
