@@ -104,14 +104,6 @@ app.post("/api/persons/", (req, res) => {
     number: req.body.number,
   };
 
-  //   if (!newPhoneAddress) {
-  //     return res.status(404).send("Address missing!");
-  //   }
-
-  //   if (!newPhoneAddress.name || !newPhoneAddress.number) {
-  //     return res.status(404).send("Name or number is missing");
-  //   }
-
   phonebook = phonebook.concat(newPhoneAddress);
 
   return res.status(200).send("Address added successfully!");
