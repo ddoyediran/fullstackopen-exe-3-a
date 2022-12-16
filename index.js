@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 
 const app = express();
@@ -48,6 +49,19 @@ app.get("/info", (req, res) => {
   //res.send(`Phone book has info for ${numberOfEntries} people`);
   //res.send(currentDate);
   return;
+});
+
+// GET: fetch a single address from the phonebook
+app.get("/api/persons/:id", (req, res) => {
+  const person = phonebook.find((personDetails) => {
+    return personDetails.id === parseInt(req.params.id);
+  });
+
+  if (!person) {
+    return res.status(404).json({ message: "Person not found in the list" });
+  }
+
+  return res.status(200).send(person);
 });
 
 app.listen(PORT, () => {
