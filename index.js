@@ -64,8 +64,73 @@ app.get("/api/persons/:id", (req, res) => {
   return res.status(200).send(person);
 });
 
+// DELETE: delete an address from the phonebook
+app.delete("/api/persons/:id", (req, res) => {
+  //   phonebook = phonebook.filter((phonebook) => {
+  //     return phonebook.id != parseInt(req.params.id);
+  //   });
+
+  //   return res.status(204).end();
+
+  // Alternative solution
+  const personIndex = phonebook.findIndex((phonebook) => {
+    return phonebook.id === parseInt(req.params.id);
+  });
+
+  if (personIndex < 0) {
+    return res.status(404).send("Address note found!");
+  }
+
+  phonebook.splice(personIndex, 1);
+
+  return res.status(204).end();
+});
+
+app.post("/api/persons/", (req, res) => {
+  // check if number and name are not empty
+  if (!req.body.name || !req.body.number) {
+    return res.status(404).send("Name or number is missing");
+  }
+
+  for (let i = 0; i < phonebook.length; i++) {
+    if (req.body.name === phonebook[i].name) {
+      return res.status(404).json({ error: "name must be unique" });
+    }
+  }
+
+  const newPhoneAddress = {
+    id: generateId(),
+    name: req.body.name,
+    number: req.body.number,
+  };
+
+  //   if (!newPhoneAddress) {
+  //     return res.status(404).send("Address missing!");
+  //   }
+
+  //   if (!newPhoneAddress.name || !newPhoneAddress.number) {
+  //     return res.status(404).send("Name or number is missing");
+  //   }
+
+  phonebook = phonebook.concat(newPhoneAddress);
+
+  return res.status(200).send("Address added successfully!");
+});
+
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
 });
 
 //http://localhost:3001/api/persons
+
+// HELPER Function
+/**
+ *
+ * @param {no params}
+ * @returns {integer}
+ */
+function generateId() {
+  const id = Math.floor(Math.random() * 1000);
+
+  return id;
+}
