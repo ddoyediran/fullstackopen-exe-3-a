@@ -39,6 +39,17 @@ app.get("/api/persons", (req, res) => {
   return res.status(200).send(phonebook);
 });
 
+app.get("/info", (req, res) => {
+  const numberOfEntries = phonebook.length;
+
+  const currentDate = new Date();
+  console.log(`Phone book has info for ${numberOfEntries} people`);
+  console.log(currentDate);
+  //res.send(`Phone book has info for ${numberOfEntries} people`);
+  //res.send(currentDate);
+  return;
+});
+
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
 });
