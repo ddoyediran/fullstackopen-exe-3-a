@@ -40,6 +40,7 @@ app.get("/api/persons", (req, res) => {
   return res.status(200).send(phonebook);
 });
 
+// GET method: fetches number of entries in the phonebook
 app.get("/info", (req, res) => {
   const numberOfEntries = phonebook.length;
 
@@ -86,6 +87,7 @@ app.delete("/api/persons/:id", (req, res) => {
   return res.status(204).end();
 });
 
+// POST: add new address to the phonebook
 app.post("/api/persons/", (req, res) => {
   // check if number and name are not empty
   if (!req.body.name || !req.body.number) {
