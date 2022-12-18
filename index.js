@@ -115,8 +115,6 @@ app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
 });
 
-//http://localhost:3001/api/persons
-
 // HELPER Function
 /**
  *
