@@ -1,10 +1,17 @@
-const { response } = require("express");
 const express = require("express");
+const morgan = require("morgan");
 
 const app = express();
 
+// get the post data using morgan
+morgan.token("body", function (req, res) {
+  return JSON.stringify(req.body);
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan("tiny"));
+app.use(morgan(":method :url :body")); // log post method, url and data
 
 const PORT = 3001;
 
