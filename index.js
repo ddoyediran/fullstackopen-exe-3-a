@@ -126,7 +126,6 @@ app.listen(PORT, () => {
 
 // HELPER Function
 /**
- *
  * @param {no params}
  * @returns {integer}
  */
