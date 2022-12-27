@@ -31,3 +31,10 @@ if (commandArg.length === 1) {
   });
   return;
 }
+
+// make connection to the database
+if (commandArg.length > 2) {
+  mongoose.connect(url).then((result) => {
+    console.log("connect");
+  });
+}
