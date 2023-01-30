@@ -31,18 +31,6 @@ if (commandArg.length === 1) {
       return mongoose.connection.close();
     });
   });
-
-  //   Phonebook.find({}).then((result) => {
-  //     console.log("this line 26 works");
-  //     result.forEach((phonebook) => {
-  //       console.log(phonebook);
-  //       console.log("this line works");
-  //     });
-  //     console.log("this line 31 works");
-  //     mongoose.connection.close();
-  //   });
-  //   console.log("this line 33 works");
-  //   //return;
 }
 
 // make connection to the database
