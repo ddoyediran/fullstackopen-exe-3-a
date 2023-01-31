@@ -66,9 +66,17 @@ app.get("/info", (req, res) => {
 
 // GET: fetch a single address from the phonebook
 app.get("/api/persons/:id", (req, res) => {
-  Phonebook.findById(req.params.id).then((phonebook) => {
-    res.json(phonebook);
-  });
+  Phonebook.findById(req.params.id)
+    .then((phonebook) => {
+      if (!phonebook) {
+        res.status(404).end();
+      }
+      res.json(phonebook);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).send({ error: "malformatted id" });
+    });
 });
 
 // app.get("/api/persons/:id", (req, res) => {
