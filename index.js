@@ -2,6 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const Phonebook = require("./models/phoneAddress");
+require("dotenv").config();
+// const { request, response } = require("express");
 
 const app = express();
 
@@ -10,13 +12,13 @@ morgan.token("body", function (req, res) {
   return JSON.stringify(req.body);
 });
 
-//app.use("cors");
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 app.use(morgan(":method :url :body")); // log post method, url and data
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 let phonebook = [
   {
@@ -64,16 +66,22 @@ app.get("/info", (req, res) => {
 
 // GET: fetch a single address from the phonebook
 app.get("/api/persons/:id", (req, res) => {
-  const person = phonebook.find((personDetails) => {
-    return personDetails.id === parseInt(req.params.id);
+  Phonebook.findById(req.params.id).then((phonebook) => {
+    res.json(phonebook);
   });
-
-  if (!person) {
-    return res.status(404).json({ message: "Person not found in the list" });
-  }
-
-  return res.status(200).send(person);
 });
+
+// app.get("/api/persons/:id", (req, res) => {
+//   const person = phonebook.find((personDetails) => {
+//     return personDetails.id === parseInt(req.params.id);
+//   });
+
+//   if (!person) {
+//     return res.status(404).json({ message: "Person not found in the list" });
+//   }
+
+//   return res.status(200).send(person);
+// });
 
 // DELETE: delete an address from the phonebook
 app.delete("/api/persons/:id", (req, res) => {
@@ -98,28 +106,45 @@ app.delete("/api/persons/:id", (req, res) => {
 });
 
 // POST: add new address to the phonebook
-app.post("/api/persons/", (req, res) => {
-  // check if number and name are not empty
-  if (!req.body.name || !req.body.number) {
-    return res.status(404).send("Name or number is missing");
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+
+  if (body.name === undefined || body.number === undefined) {
+    return response.status(400).json({ error: "Phone address missing!" });
   }
 
-  for (let i = 0; i < phonebook.length; i++) {
-    if (req.body.name === phonebook[i].name) {
-      return res.status(404).json({ error: "name must be unique" });
-    }
-  }
+  const phoneDetails = new Phonebook({
+    name: body.name,
+    number: body.number,
+  });
 
-  const newPhoneAddress = {
-    id: generateId(),
-    name: req.body.name,
-    number: req.body.number,
-  };
-
-  phonebook = phonebook.concat(newPhoneAddress);
-
-  return res.status(200).send("Address added successfully!");
+  phoneDetails.save().then((savedDetails) => {
+    res.json(savedDetails);
+  });
 });
+
+// app.post("/api/persons/", (req, res) => {
+//   // check if number and name are not empty
+//   if (!req.body.name || !req.body.number) {
+//     return res.status(404).send("Name or number is missing");
+//   }
+
+//   for (let i = 0; i < phonebook.length; i++) {
+//     if (req.body.name === phonebook[i].name) {
+//       return res.status(404).json({ error: "name must be unique" });
+//     }
+//   }
+
+//   const newPhoneAddress = {
+//     id: generateId(),
+//     name: req.body.name,
+//     number: req.body.number,
+//   };
+
+//   phonebook = phonebook.concat(newPhoneAddress);
+
+//   return res.status(200).send("Address added successfully!");
+// });
 
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`);
