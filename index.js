@@ -73,10 +73,7 @@ app.get("/api/persons/:id", (req, res) => {
       }
       res.json(phonebook);
     })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send({ error: "malformatted id" });
-    });
+    .catch((error) => next(error));
 });
 
 // app.get("/api/persons/:id", (req, res) => {
