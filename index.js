@@ -151,21 +151,6 @@ app.post("/api/persons", (req, res) => {
 //   return res.status(200).send("Address added successfully!");
 // });
 
-app.listen(PORT, () => {
-  console.log(`App is running on port ${PORT}`);
-});
-
-// HELPER Function
-/**
- * @param {no params}
- * @returns {integer}
- */
-function generateId() {
-  const id = Math.floor(Math.random() * 1000);
-
-  return id;
-}
-
 /**
  * Error handling middleware
  * @param {error, request, response, next}
@@ -183,3 +168,18 @@ const errorHandler = (error, request, response, next) => {
 };
 
 app.use(errorHandler);
+
+app.listen(PORT, () => {
+  console.log(`App is running on port ${PORT}`);
+});
+
+// HELPER Function
+/**
+ * @param {no params}
+ * @returns {integer}
+ */
+function generateId() {
+  const id = Math.floor(Math.random() * 1000);
+
+  return id;
+}
