@@ -2,10 +2,27 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const Phonebook = require("./models/phoneAddress");
+const { response } = require("express");
 require("dotenv").config();
 // const { request, response } = require("express");
 
 const app = express();
+
+/**
+ * Error handling middleware
+ * @param {error, request, response, next}
+ * @returns {JSON Error}
+ */
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "Malformatted id" });
+  }
+
+  next(error);
+};
 
 // get the post data using morgan
 morgan.token("body", function (req, res) {
@@ -45,11 +62,15 @@ let phonebook = [
 
 // GET method: fetches all the list in the phonebook
 app.get("/api/persons", (req, res) => {
-  if (!phonebook) {
-    return res.status(404).json({ message: "phonebook is empty" });
-  }
+  Phonebook.find({}).then((phonebook) => {
+    res.json(phonebook);
+  });
 
-  return res.status(200).send(phonebook);
+  // if (!phonebook) {
+  //   return res.status(404).json({ message: "phonebook is empty" });
+  // }
+
+  // return res.status(200).send(phonebook);
 });
 
 // GET method: fetches number of entries in the phonebook
@@ -66,7 +87,7 @@ app.get("/info", (req, res) => {
 
 // GET: fetch a single address from the phonebook
 app.get("/api/persons/:id", (req, res) => {
-  Phonebook.findById(req.params.id)
+  Phonebook.Phonebook.findById(req.params.id)
     .then((phonebook) => {
       if (!phonebook) {
         res.status(404).end();
@@ -150,22 +171,6 @@ app.post("/api/persons", (req, res) => {
 
 //   return res.status(200).send("Address added successfully!");
 // });
-
-/**
- * Error handling middleware
- * @param {error, request, response, next}
- * @returns {JSON Error}
- */
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
-
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "Malformatted id" });
-  }
-
-  next(error);
-};
 
 app.use(errorHandler);
 
