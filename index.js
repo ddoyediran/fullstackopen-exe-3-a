@@ -86,11 +86,11 @@ app.get("/info", (req, res) => {
 });
 
 // GET: fetch a single address from the phonebook
-app.get("/api/persons/:id", (req, res) => {
-  Phonebook.Phonebook.findById(req.params.id)
+app.get("/api/persons/:id", (req, res, next) => {
+  Phonebook.findById(req.params.id)
     .then((phonebook) => {
       if (!phonebook) {
-        res.status(404).end();
+        return res.status(404).end();
       }
       res.json(phonebook);
     })
@@ -110,25 +110,25 @@ app.get("/api/persons/:id", (req, res) => {
 // });
 
 // DELETE: delete an address from the phonebook
-app.delete("/api/persons/:id", (req, res) => {
+app.delete("/api/persons/:id", (req, res, next) => {
+  Phonebook.findByIdAndRemove(req.params.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((error) => next(error));
   //   phonebook = phonebook.filter((phonebook) => {
   //     return phonebook.id != parseInt(req.params.id);
   //   });
-
   //   return res.status(204).end();
-
   // Alternative solution
-  const personIndex = phonebook.findIndex((phonebook) => {
-    return phonebook.id === parseInt(req.params.id);
-  });
-
-  if (personIndex < 0) {
-    return res.status(404).send("Address note found!");
-  }
-
-  phonebook.splice(personIndex, 1);
-
-  return res.status(204).end();
+  // const personIndex = phonebook.findIndex((phonebook) => {
+  //   return phonebook.id === parseInt(req.params.id);
+  // });
+  // if (personIndex < 0) {
+  //   return res.status(404).send("Address note found!");
+  // }
+  // phonebook.splice(personIndex, 1);
+  // return res.status(204).end();
 });
 
 // POST: add new address to the phonebook
@@ -136,7 +136,7 @@ app.post("/api/persons", (req, res) => {
   const body = req.body;
 
   if (body.name === undefined || body.number === undefined) {
-    return response.status(400).json({ error: "Phone address missing!" });
+    return res.status(400).json({ error: "Phone address missing!" });
   }
 
   const phoneDetails = new Phonebook({
@@ -171,6 +171,21 @@ app.post("/api/persons", (req, res) => {
 
 //   return res.status(200).send("Address added successfully!");
 // });
+
+app.put("/api/persons/:id", (req, res, next) => {
+  const body = req.body;
+
+  const personDetails = {
+    name: body.name,
+    number: body.number,
+  };
+
+  Phonebook.findByIdAndUpdate(req.params.id, personDetails, { new: true })
+    .then((updatedDetails) => {
+      res.json(updatedDetails);
+    })
+    .catch((error) => next(error));
+});
 
 app.use(errorHandler);
 
