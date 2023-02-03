@@ -165,3 +165,21 @@ function generateId() {
 
   return id;
 }
+
+/**
+ * Error handling middleware
+ * @param {error, request, response, next}
+ * @returns {JSON Error}
+ */
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "Malformatted id" });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
