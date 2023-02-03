@@ -2,22 +2,21 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const Phonebook = require("./models/phoneAddress");
-const { response } = require("express");
-require("dotenv").config();
+// require("dotenv").config();
 
 const app = express();
 
 /**
  * Error handling middleware
- * @param {error, request, response, next}
+ * @param {error, req, res, next}
  * @returns {JSON Error}
  */
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, req, res, next) => {
   console.error(error.message);
 
   if (error.name === "CastError") {
-    return response.status(400).send({ error: "Malformatted id" });
+    return res.status(400).send({ error: "Malformatted id" });
   }
 
   next(error);
