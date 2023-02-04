@@ -2,7 +2,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const Phonebook = require("./models/phoneAddress");
-// require("dotenv").config();
 
 const app = express();
 
@@ -80,10 +79,6 @@ app.delete("/api/persons/:id", (req, res, next) => {
 // POST: add new address to the phonebook
 app.post("/api/persons", (req, res, next) => {
   const body = req.body;
-
-  // if (body.name === undefined || body.number === undefined) {
-  //   return res.status(400).json({ error: "Phone address missing!" });
-  // }
 
   const phoneDetails = new Phonebook({
     name: body.name,
