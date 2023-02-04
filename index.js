@@ -81,28 +81,26 @@ app.delete("/api/persons/:id", (req, res, next) => {
 app.post("/api/persons", (req, res, next) => {
   const body = req.body;
 
-  if (body.name === undefined || body.number === undefined) {
-    return res.status(400).json({ error: "Phone address missing!" });
-  }
+  // if (body.name === undefined || body.number === undefined) {
+  //   return res.status(400).json({ error: "Phone address missing!" });
+  // }
 
   const phoneDetails = new Phonebook({
     name: body.name,
     number: body.number,
   });
 
-  phoneDetails.save().then((savedDetails) => {
-    res.json(savedDetails);
-  });
+  phoneDetails
+    .save()
+    .then((savedDetails) => {
+      res.json(savedDetails);
+    })
+    .catch((error) => next(error));
 });
 
 // PUT: update address in the phonebook
 app.put("/api/persons/:id", (req, res, next) => {
   const { name, number } = req.body;
-
-  // const personDetails = {
-  //   name: body.name,
-  //   number: body.number,
-  // };
 
   Phonebook.findByIdAndUpdate(
     req.params.id,
