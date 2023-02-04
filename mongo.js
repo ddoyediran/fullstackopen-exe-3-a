@@ -12,8 +12,16 @@ const url = `mongodb+srv://phonebook:${password}@cluster0.4idts.mongodb.net/phon
 
 // create a Schema
 const phoneBookSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minLength: 4,
+    required: true,
+  },
+  number: {
+    type: String,
+    minLength: 7,
+    required: true,
+  },
   date: Date,
 });
 
