@@ -16,7 +16,9 @@ const errorHandler = (error, req, res, next) => {
   console.error(error.message);
 
   if (error.name === "CastError") {
-    return res.status(400).send({ error: "Malformatted id" });
+    return res.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return res.status(400).json({ error: error.message });
   }
 
   next(error);
@@ -76,7 +78,7 @@ app.delete("/api/persons/:id", (req, res, next) => {
 });
 
 // POST: add new address to the phonebook
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const body = req.body;
 
   if (body.name === undefined || body.number === undefined) {
@@ -95,14 +97,18 @@ app.post("/api/persons", (req, res) => {
 
 // PUT: update address in the phonebook
 app.put("/api/persons/:id", (req, res, next) => {
-  const body = req.body;
+  const { name, number } = req.body;
 
-  const personDetails = {
-    name: body.name,
-    number: body.number,
-  };
+  // const personDetails = {
+  //   name: body.name,
+  //   number: body.number,
+  // };
 
-  Phonebook.findByIdAndUpdate(req.params.id, personDetails, { new: true })
+  Phonebook.findByIdAndUpdate(
+    req.params.id,
+    { name, number },
+    { new: true, runValidators: true, context: "query" }
+  )
     .then((updatedDetails) => {
       res.json(updatedDetails);
     })
