@@ -2,14 +2,14 @@ const phonebookRouter = require("express").Router();
 const Phonebook = require("../models/phoneAddress");
 
 // GET method: fetches all the list in the phonebook
-phonebookRouter.get("/api/persons", (req, res) => {
+phonebookRouter.get("/", (req, res) => {
   Phonebook.find({}).then((phonebook) => {
     res.json(phonebook);
   });
 });
 
 // GET: fetch a single address from the phonebook
-phonebookRouter.get("/api/persons/:id", (req, res, next) => {
+phonebookRouter.get("/:id", (req, res, next) => {
   Phonebook.findById(req.params.id)
     .then((phonebook) => {
       if (!phonebook) {
@@ -21,7 +21,7 @@ phonebookRouter.get("/api/persons/:id", (req, res, next) => {
 });
 
 // DELETE: delete an address from the phonebook
-phonebookRouter.delete("/api/persons/:id", (req, res, next) => {
+phonebookRouter.delete("/:id", (req, res, next) => {
   Phonebook.findByIdAndRemove(req.params.id)
     .then((result) => {
       res.status(204).end();
@@ -30,7 +30,7 @@ phonebookRouter.delete("/api/persons/:id", (req, res, next) => {
 });
 
 // POST: add new address to the phonebook
-phonebookRouter.post("/api/persons", (req, res, next) => {
+phonebookRouter.post("/", (req, res, next) => {
   const body = req.body;
 
   const phoneDetails = new Phonebook({
@@ -47,7 +47,7 @@ phonebookRouter.post("/api/persons", (req, res, next) => {
 });
 
 // PUT: update address in the phonebook
-phonebookRouter.put("/api/persons/:id", (req, res, next) => {
+phonebookRouter.put("/:id", (req, res, next) => {
   const { name, number } = req.body;
 
   Phonebook.findByIdAndUpdate(
