@@ -29,4 +29,8 @@
 ]
 ```
 
+### Dependencies and tools
+
+MongoDB, Mongoose, Expressjs, Cors, dotenv
+
 View the complete solution live [here](https://phonebook-fullstackopen-4yy9.onrender.com/api/persons/)
